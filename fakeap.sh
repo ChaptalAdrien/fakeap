@@ -1,6 +1,9 @@
 #!/bin/bash
 # Start
 
+#Assign the network Gateway and netmask to the interface and add the routing table
+ifconfig wlan0 up 192.168.1.1 netmask 255.255.255.0
+route add -net 192.168.1.0 netmask 255.255.255.0 gw 192.168.1.1
 
 # Start DHCP/DNS server
 dnsmasq -C conf/dnsmasq.conf -H conf/fakehosts.conf -d
