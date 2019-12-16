@@ -13,9 +13,9 @@ IP="192.168.0.1"
 MASK="255.255.255.0"
 
 echo -e "WIFI interface configuration ..."
-sudo ifconfig $INT_WIFI down
+sudo ip link set $INT_WIFI down
 sleep 0.5
-sudo ifconfig $INT_WIFI $IP netmask $MASK up
+sudo ip link set $INT_WIFI $IP netmask $MASK up
 
 echo -e "startintg daemon hostapd..."
 # start hostapd server (see hostapd.conf)
@@ -66,8 +66,8 @@ sudo iptables -D INPUT -s $SUBNET --jump ACCEPT 2>/dev/null
 echo -e "iptables CLEAN"
 
 # interfaces
-sudo ifconfig $INT_WIFI down
-sudo ifconfig $INT_WIFI up
+sudo ip link set $INT_WIFI down
+sudo ip link set $INT_WIFI up
  
 # Turn off IP forwarding
 echo 0 > /proc/sys/net/ipv4/ip_forward
