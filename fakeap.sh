@@ -39,15 +39,12 @@ echo 1 > /proc/sys/net/ipv4/ip_forward
 
 echo -e "IPTABLES configuration"
 # IP TABLES
-sudo iptables --table nat --append POSTROUTING --out-interface $INT_NET -j MASQUERADE 
-sudo iptables --append FORWARD --in-interface $INT_WIFI -j ACCEPT 
-sudo iptables -t nat -A PREROUTING -p tcp --dport 80 -j DNAT --to-destination $IP:80 
-sudo iptables -t nat -A POSTROUTING -j MASQUERADE 
 
-#dnsspoof
-sudo dnsspoof -i $INT_WIFI 
+sudo iptables -A FORWARD --match state --state RELATED,ESTABLISHED --jump ACCEPT
+sudo iptables -A FORWARD -i $INT_WIFI --destination $SUBNET --match state --state NEW --jump ACCEPT
+sudo iptables -A INPUT -s $SUBNET --jump ACCEPT
 
-
+#DONE
 echo -e "[finished! Please don't close the shell ]"
 echo -e "[ENTER = STOP hostapd dhcpd dnsmasq   ]"
 echo -e "[        STOP interface wifi     ]"
@@ -58,10 +55,13 @@ echo -e "Stop hostapd, dhcpd, dnsmasq & wifi interface..."
 sudo killall hostapd dnsmasq dhcpd
 
 echo -e "errasing IPTABLES RULES..."
+
 sudo iptables -D POSTROUTING -t nat -o $INT_NET -j MASQUERADE 2>/dev/null
 sudo iptables -D FORWARD -i $INT_WIFI --destination $SUBNET --match state --state NEW --jump ACCEPT 2>/dev/null
 sudo iptables -D FORWARD --match state --state RELATED,ESTABLISHED --jump ACCEPT 2>/dev/null
 sudo iptables -D INPUT -s $SUBNET --jump ACCEPT 2>/dev/null
+ 
+echo -e $cyan"Désactivation iptables FORWARD & INPUT...$NC $red$INT_WIFI$NC$blue & $NC$red$SUBNET$NC"
 
 echo -e "iptables CLEAN"
 
