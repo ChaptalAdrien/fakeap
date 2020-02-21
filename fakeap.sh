@@ -61,7 +61,7 @@ sudo iptables -D FORWARD -i $INT_WIFI --destination $SUBNET --match state --stat
 sudo iptables -D FORWARD --match state --state RELATED,ESTABLISHED --jump ACCEPT 2>/dev/null
 sudo iptables -D INPUT -s $SUBNET --jump ACCEPT 2>/dev/null
  
-echo -e $cyan"Désactivation iptables FORWARD & INPUT...$NC $red$INT_WIFI$NC$blue & $NC$red$SUBNET$NC"
+echo -e "Désactivation iptables FORWARD & INPUT...$INT_WIFI$NC$blue & $SUBNET"
 
 echo -e "iptables CLEAN"
 
