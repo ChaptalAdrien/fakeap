@@ -4,8 +4,8 @@
 #Description : Enable the wifi access point and configure the routes, Iptables, and net fowarding
 
 #interfaces configuration
-INT_WIFI="wlan0" # wifi access point interface
-INT_NET="eth0" # interface connected to internet
+INT_WIFI="wlx00c0caaa2eb0" # wifi access point interface
+INT_NET="ens33" # interface connected to internet
 
 #Ip & mask of the wlan network
 SUBNET="192.168.0.0/24" 
@@ -15,7 +15,8 @@ MASK="255.255.255.0"
 echo -e "WIFI interface configuration ..."
 sudo ip link set $INT_WIFI down
 sleep 0.5
-sudo ip link set $INT_WIFI $IP netmask $MASK up
+sudo ip addr add $IP/24 dev $INT_WIFI
+sudo ip link set $INT_WIFI up
 
 echo -e "startintg daemon hostapd..."
 # start hostapd server (see hostapd.conf)
@@ -31,7 +32,12 @@ sleep 1
 echo -e "Starting daemon dhcpd... "
 # start or resart dhcpd server (see dhcpd.conf)
 sudo touch /var/lib/dhcp/dhcpd.leases
+sudo chmod 666 /var/lib/dhcp/dhcpd.leases
+
+sudo mkdir -p /var/run/dhcp-server
+sudo chown dhcpd:dhcpd /var/run/dhcp-server
 sudo dhcpd  -f -pf /var/run/dhcp-server/dhcpd.pid -cf conf/dhcpd.conf $INT_WIFI &
+#/etc/init.d/dhcp-server restart
 sleep 2
 
 #  Turn on IP forwarding
@@ -49,6 +55,8 @@ echo -e "[finished! Please don't close the shell ]"
 echo -e "[ENTER = STOP hostapd dhcpd dnsmasq   ]"
 echo -e "[        STOP interface wifi     ]"
 echo -e "[        ERRASE IPTABLES rules   ]"
+
+read none
 
 echo -e "Stop hostapd, dhcpd, dnsmasq & wifi interface..."
 # kill hostapd, dnsmasq & dhcpd
