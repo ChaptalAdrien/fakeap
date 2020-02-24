@@ -1,11 +1,8 @@
 bogus-priv
 filterwin2k
 
-no-resolv
+#no-resolv
 interface=wlx00c0caaa2eb0
-no-dhcp-interface=wlx00c0caaa2eb0
-server=8.8.8.8
-server=8.8.4.4
-
+no-dhcp-interface=wl
 listen-address=127.0.0.1
 

@@ -1,4 +1,4 @@
-#!/bin/bash
+*#!/bin/bash
 
 #By Adrien Chaptal & Enrick Mondongue
 #Description : Enable the wifi access point and configure the routes, Iptables, and net fowarding
@@ -35,7 +35,8 @@ sudo touch /var/lib/dhcp/dhcpd.leases
 sudo chmod 666 /var/lib/dhcp/dhcpd.leases
 
 sudo mkdir -p /var/run/dhcp-server
-sudo chown dhcpd:dhcpd /var/run/dhcp-server
+sudo chown root:root /var/run/dhcp-server
+
 sudo dhcpd  -f -pf /var/run/dhcp-server/dhcpd.pid -cf conf/dhcpd.conf $INT_WIFI &
 #/etc/init.d/dhcp-server restart
 sleep 2
@@ -61,6 +62,9 @@ read none
 echo -e "Stop hostapd, dhcpd, dnsmasq & wifi interface..."
 # kill hostapd, dnsmasq & dhcpd
 sudo killall hostapd dnsmasq dhcpd
+
+#delete dhcpd.pid file
+sudo rm /var/run/dhcp-server/dhcpd.pid
 
 echo -e "errasing IPTABLES RULES..."
 
