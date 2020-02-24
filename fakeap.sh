@@ -47,6 +47,11 @@ echo 1 > /proc/sys/net/ipv4/ip_forward
 echo -e "IPTABLES configuration"
 # IP TABLES
 
+echo -e "Activation iptables NAT MASQUERADE interface"
+# load masquerade module
+sudo modprobe ipt_MASQUERADE
+sudo iptables -A POSTROUTING -t nat -o $INT_NET -j MASQUERADE
+
 sudo iptables -A FORWARD --match state --state RELATED,ESTABLISHED --jump ACCEPT
 sudo iptables -A FORWARD -i $INT_WIFI --destination $SUBNET --match state --state NEW --jump ACCEPT
 sudo iptables -A INPUT -s $SUBNET --jump ACCEPT
