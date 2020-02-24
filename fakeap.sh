@@ -57,6 +57,7 @@ sudo iptables -A FORWARD -i $INT_WIFI --destination $SUBNET --match state --stat
 sudo iptables -A INPUT -s $SUBNET --jump ACCEPT
 
 #DONE
+
 echo -e "[finished! Please don't close the shell ]"
 echo -e "[ENTER = STOP hostapd dhcpd dnsmasq   ]"
 echo -e "[        STOP interface wifi     ]"
@@ -72,6 +73,7 @@ sudo killall hostapd dnsmasq dhcpd
 sudo rm /var/run/dhcp-server/dhcpd.pid
 
 echo -e "errasing IPTABLES RULES..."
+
 
 sudo iptables -D POSTROUTING -t nat -o $INT_NET -j MASQUERADE 2>/dev/null
 sudo iptables -D FORWARD -i $INT_WIFI --destination $SUBNET --match state --state NEW --jump ACCEPT 2>/dev/null
