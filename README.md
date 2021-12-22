@@ -28,5 +28,5 @@ The <b>Html </b> folder contain my captive portal. If you want to use it, you ne
 Run in a terminal and wait !
 
 <h2> Ameliorations </h2>
-In this version, the ap doesn't grant acces to internet after the client have filed the formula of the captive portal. All the trafic is redireted to the captive portal.
+In this version, the ap doesn't grant acces to internet after the client have filed the form of the captive portal. All the trafic is redireted to the captive portal.
 Also, the captive portal doesn't work with https requests.
